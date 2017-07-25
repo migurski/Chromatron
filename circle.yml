@@ -1,0 +1,10 @@
+machine:
+  node:
+    version: 6.1.0
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - npm run build
+      - aws s3 sync --acl public-read build/ s3://chromatron/
