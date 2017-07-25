@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Chroma from 'chroma-js'
+
+console.log(Chroma);
 
 function Color(props)
 {
@@ -20,8 +23,8 @@ class Field extends React.Component
         super();
         this.state = {
             colors: [
-                {fill: '#f0f', x: 160, y: 160, r: 80},
-                {fill: '#ff0', x: 120, y: 120, r: 100}
+                {fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
+                {fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
             ]
         };
     }
