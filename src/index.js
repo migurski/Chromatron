@@ -77,16 +77,22 @@ class Field extends React.Component
     
     updateColor(color)
     {
-        for(var i = 0; i < this.state.colors.length; i++)
+        var state = {
+            colors: this.state.colors.slice(),
+            active: this.state.active.slice(),
+            index: this.state.index
+        };
+        
+        for(var i = 0; i < state.colors.length; i++)
         {
-            if(this.state.colors[i] === color)
+            if(state.colors[i] === color)
             {
                 console.log('Updated', i, color)
-                this.state.colors[i] = color; // mutating anyway
+                state.colors[i] = color;
             }
         }
         
-        this.setState(this.state);
+        this.setState(state);
     }
 
     render()
