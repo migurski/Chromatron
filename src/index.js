@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Chroma from 'chroma-js'
+import zlib from 'zlib'
 
 function Color(props)
 {
@@ -73,7 +74,7 @@ class Control extends React.Component
         
         state.handle.x = e.offsetX - state.color.x;
         state.handle.y = e.offsetY - state.color.y;
-        state.color.r = Math.hypot(state.handle.x, state.handle.y);
+        state.color.r = Math.round(Math.hypot(state.handle.x, state.handle.y));
         this.field.updateColor(state.color);
         this.setState(state);
     }
@@ -175,7 +176,32 @@ class Field extends React.Component
 
         this.onClickedBackground = this.onClickedBackground.bind(this);
         this.onRendered = this.onRendered.bind(this);
+        this.saveState = this.saveState.bind(this);
         this.svgElement = null;
+        this.timeout = null;
+    }
+    
+    saveState()
+    {
+        var state = { colors: [], index: this.state.index };
+        
+        for(var i = 0, color; i < this.state.colors.length; i++)
+        {
+            color = this.state.colors[i];
+            state.colors.push({fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
+        }
+        
+        console.log(JSON.stringify(state).length, 'chars JSON');
+        
+        var bytes = zlib.deflateSync(JSON.stringify(state), {level: 9}),
+            ascii = bytes.toString('base64'),
+            hash = window.encodeURIComponent(ascii);
+        
+        console.log(bytes.length, 'bytes zlib');
+        console.log(ascii.length, 'chars base64');
+        console.log(hash.length, 'chars hash');
+        
+        window.location.hash = hash;
     }
     
     onRendered(svg)
@@ -273,6 +299,12 @@ class Field extends React.Component
               </ol>
             </div>
         );
+    }
+    
+    componentDidUpdate()
+    {
+        window.clearTimeout(this.timeout);
+        this.timeout = window.setTimeout(this.saveState, 500);
     }
 }
 
