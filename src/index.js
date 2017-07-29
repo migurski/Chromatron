@@ -69,52 +69,37 @@ class Field extends React.Component
     
     onClickedBackground()
     {
-        var state = {
-            colors: this.state.colors.slice(),
-            active: null,
-            stack: this.state.stack.slice(),
-            index: this.state.index
-        };
-
-        this.setState(state);
+        this.setState({active: null});
     }
     
     onClickedColor(color)
     {
-        var state = {
-            colors: this.state.colors.slice(),
-            active: color,
-            stack: this.state.stack.slice(),
-            index: this.state.index
-        };
+        var stack = this.state.stack.slice();
         
-        if(color !== state.stack[0])
+        if(color !== stack[0])
         {
-            state.stack.unshift(color);
-            state.stack.splice(3);
+            stack.unshift(color);
+            stack.splice(3);
         }
 
-        this.setState(state);
+        this.setState({stack: stack, active: color});
     }
     
     updateColor(color)
     {
-        var state = {
-            colors: this.state.colors.slice(),
-            active: this.state.active,
-            stack: this.state.stack.slice(),
-            index: this.state.index
-        };
+        var colors = this.state.colors.slice();
         
-        for(var i = 0; i < state.colors.length; i++)
+        /*
+        for(var i = 0; i < colors.length; i++)
         {
-            if(state.colors[i] === color)
+            if(colors[i] === color)
             {
-                state.colors[i] = color;
+                colors[i] = color;
             }
         }
+        */
         
-        this.setState(state);
+        this.setState({colors: colors});
     }
 
     render()

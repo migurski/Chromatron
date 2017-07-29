@@ -28,15 +28,12 @@ export class Control extends React.Component
     
     onCenterMouseMove(e)
     {
-        var state = {
-            color: this.state.color,
-            handle: this.state.handle
-            };
+        var color = this.state.color;
         
-        state.color.x = e.offsetX;
-        state.color.y = e.offsetY;
-        this.field.updateColor(state.color);
-        this.setState(state);
+        color.x = e.offsetX;
+        color.y = e.offsetY;
+        this.field.updateColor(color);
+        this.setState({color: color});
     }
 
     onCenterMouseUp(e)
@@ -52,16 +49,14 @@ export class Control extends React.Component
     
     onHandleMouseMove(e)
     {
-        var state = {
-            color: this.state.color,
-            handle: this.state.handle
-            };
+        var color = this.state.color,
+            handle = this.state.handle;
         
-        state.handle.x = e.offsetX - state.color.x;
-        state.handle.y = e.offsetY - state.color.y;
-        state.color.r = Math.round(Math.hypot(state.handle.x, state.handle.y));
-        this.field.updateColor(state.color);
-        this.setState(state);
+        handle.x = e.offsetX - color.x;
+        handle.y = e.offsetY - color.y;
+        color.r = Math.round(Math.hypot(handle.x, handle.y));
+        this.field.updateColor(color);
+        this.setState({color: color, handle: handle});
     }
 
     onHandleMouseUp(e)
