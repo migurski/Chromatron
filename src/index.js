@@ -22,14 +22,7 @@ class Field extends React.Component
     constructor()
     {
         super();
-        this.state = {
-            colors: [
-                {i: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
-                {i: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
-            ],
-            active: null,
-            stack: [ ]
-        };
+        this.state = this.loadState();
 
         this.onClickedBackground = this.onClickedBackground.bind(this);
         this.onRendered = this.onRendered.bind(this);
@@ -37,6 +30,38 @@ class Field extends React.Component
         this.svgElement = null;
         this.timeout = null;
         this.index = 0;
+    }
+    
+    loadState()
+    {
+        // a default state
+        var state = {
+            colors: [ ],
+            active: null,
+            stack: [ ]
+        };
+
+        try {
+            var ascii = window.location.hash.replace('#', ''),
+                bytes = new Buffer(ascii, 'base64'),
+                json = zlib.inflateSync(bytes).toString(),
+                loaded = JSON.parse(json);
+        
+            for(var i = 0; i < loaded.colors.length; i++)
+            {
+                loaded.colors[i].fill = Chroma(loaded.colors[i].fill);
+                state.colors.push(loaded.colors[i]);
+            }
+
+        } catch(e) {
+            // some lame default colors
+            state.colors = [
+                {i: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
+                {i: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
+                ];
+        }
+        
+        return state;
     }
     
     saveState()
