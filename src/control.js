@@ -24,6 +24,7 @@ export class Control extends React.Component
     {
         this.field.svgElement.addEventListener('mousemove', this.onCenterMouseMove);
         document.addEventListener('mouseup', this.onCenterMouseUp);
+        e.preventDefault();
     }
     
     onCenterMouseMove(e)
@@ -34,6 +35,8 @@ export class Control extends React.Component
         color.y = e.offsetY;
         this.field.updateColor(color);
         this.setState({color: color});
+
+        e.preventDefault();
     }
 
     onCenterMouseUp(e)
@@ -45,6 +48,7 @@ export class Control extends React.Component
     {
         this.field.svgElement.addEventListener('mousemove', this.onHandleMouseMove);
         document.addEventListener('mouseup', this.onHandleMouseUp);
+        e.preventDefault();
     }
     
     onHandleMouseMove(e)
@@ -57,6 +61,8 @@ export class Control extends React.Component
         color.r = Math.round(Math.hypot(handle.x, handle.y));
         this.field.updateColor(color);
         this.setState({color: color, handle: handle});
+        
+        e.preventDefault();
     }
 
     onHandleMouseUp(e)
