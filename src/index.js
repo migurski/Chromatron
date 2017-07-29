@@ -24,12 +24,11 @@ class Field extends React.Component
         super();
         this.state = {
             colors: [
-                {fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
-                {fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
+                {i: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
+                {i: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
             ],
             active: null,
-            stack: [ ],
-            index: 0
+            stack: [ ]
         };
 
         this.onClickedBackground = this.onClickedBackground.bind(this);
@@ -37,16 +36,17 @@ class Field extends React.Component
         this.saveState = this.saveState.bind(this);
         this.svgElement = null;
         this.timeout = null;
+        this.index = 0;
     }
     
     saveState()
     {
-        var state = { colors: [], index: this.state.index };
+        var state = { colors: [] };
         
         for(var i = 0, color; i < this.state.colors.length; i++)
         {
             color = this.state.colors[i];
-            state.colors.push({fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
+            state.colors.push({i: color.i, fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
         }
         
         console.log(JSON.stringify(state).length, 'chars JSON');
@@ -118,15 +118,16 @@ class Field extends React.Component
         }
         
         // render a stack of forms
-        for(var j = 0; j < this.state.stack.length; j++)
+        for(var j = 0, color; j < this.state.stack.length; j++)
         {
-            forms.push(<Form key={'form-' + this.state.index++} field={this} color={this.state.stack[j]} />)
+            color = this.state.stack[j];
+            forms.push(<Form key={'form-' + this.index++} field={this} color={color} />)
         }
         
         // show control for the active color
         if(this.state.active)
         {
-            var key = 'control-' + this.state.colors.indexOf(this.state.active);
+            var key = 'control-' + this.state.active.i;
             control = <Control key={key} field={this} color={this.state.active} />;
         }
         
