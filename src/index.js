@@ -49,17 +49,10 @@ class Field extends React.Component
             state.colors.push({i: color.i, fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
         }
         
-        console.log(JSON.stringify(state).length, 'chars JSON');
-        
         var bytes = zlib.deflateSync(JSON.stringify(state), {level: 9}),
-            ascii = bytes.toString('base64'),
-            hash = window.encodeURIComponent(ascii);
+            ascii = bytes.toString('base64');
         
-        console.log(bytes.length, 'bytes zlib');
-        console.log(ascii.length, 'chars base64');
-        console.log(hash.length, 'chars hash');
-        
-        window.location.hash = hash;
+        window.location.hash = ascii;
     }
     
     onRendered(svg)
