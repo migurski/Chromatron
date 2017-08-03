@@ -34,7 +34,7 @@ export class Control extends React.Component
         color.x = e.offsetX;
         color.y = e.offsetY;
         this.field.updateColor(color);
-        this.setState({color: color});
+        //this.setState({color: color});
 
         e.preventDefault();
     }
@@ -60,7 +60,7 @@ export class Control extends React.Component
         handle.y = e.offsetY - color.y;
         color.r = Math.round(Math.hypot(handle.x, handle.y));
         this.field.updateColor(color);
-        this.setState({color: color, handle: handle});
+        //this.setState({color: color, handle: handle});
         
         e.preventDefault();
     }

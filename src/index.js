@@ -29,7 +29,7 @@ class Field extends React.Component
         this.saveState = this.saveState.bind(this);
         this.svgElement = null;
         this.timeout = null;
-        this.index = 0;
+        this.form_index = 0;
     }
     
     loadState()
@@ -38,7 +38,8 @@ class Field extends React.Component
         var state = {
             colors: [ ],
             active: null,
-            stack: [ ]
+            stack: [ ],
+            index: 0
         };
 
         try {
@@ -52,13 +53,16 @@ class Field extends React.Component
                 loaded.colors[i].fill = Chroma(loaded.colors[i].fill);
                 state.colors.push(loaded.colors[i]);
             }
+            
+            state.index = loaded.index || loaded.colors.length;
 
         } catch(e) {
             // some lame default colors
             state.colors = [
-                {i: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
-                {i: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
+                {id: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
+                {id: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
                 ];
+            state.index = 2;
         }
         
         return state;
@@ -66,12 +70,12 @@ class Field extends React.Component
     
     saveState()
     {
-        var state = { colors: [] };
+        var state = { colors: [], index: this.state.index };
         
         for(var i = 0, color; i < this.state.colors.length; i++)
         {
             color = this.state.colors[i];
-            state.colors.push({i: color.i, fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
+            state.colors.push({id: color.id, fill: color.fill.hex(), x: color.x, y: color.y, r: color.r});
         }
         
         var bytes = zlib.deflateSync(JSON.stringify(state), {level: 9}),
@@ -94,28 +98,35 @@ class Field extends React.Component
     {
         var stack = this.state.stack.slice();
         
-        if(color !== stack[0])
+        /*
+        for(var i = stack.length - 1; i >= 0; i--)
         {
-            stack.unshift(color);
-            stack.splice(3);
+            if(stack[i] === color.id) { stack.splice(i, 1) }
         }
-
-        this.setState({stack: stack, active: color});
+        */
+        
+        for(var index, i = 0; i < this.state.colors.length; i++)
+        {
+            if(this.state.colors[i].id === color.id) { index = i }
+        }
+        
+        stack.unshift(index);
+        stack.splice(3);
+        
+        this.setState({stack: stack, active: index});
     }
     
     updateColor(color)
     {
         var colors = this.state.colors.slice();
         
-        /*
         for(var i = 0; i < colors.length; i++)
         {
-            if(colors[i] === color)
+            if(colors[i].id === color.id)
             {
                 colors[i] = color;
             }
         }
-        */
         
         this.setState({colors: colors});
     }
@@ -124,7 +135,8 @@ class Field extends React.Component
     {
         var colors = this.state.colors.slice(),
             forms = [],
-            control = null;
+            control = null,
+            key, color;
     
         // smallest circles should appear in front
         colors.sort(function(c1, c2) { return c2.r - c1.r });
@@ -136,17 +148,19 @@ class Field extends React.Component
         }
         
         // render a stack of forms
-        for(var j = 0, color; j < this.state.stack.length; j++)
+        for(var j = 0; j < this.state.stack.length; j++)
         {
-            color = this.state.stack[j];
-            forms.push(<Form key={'form-' + this.index++} field={this} color={color} />)
+            key = 'form-' + this.form_index++;
+            color = this.state.colors[this.state.stack[j]];
+            forms.push(<Form key={key} field={this} color={color} />)
         }
         
         // show control for the active color
-        if(this.state.active)
+        if(this.state.active != undefined)
         {
-            var key = 'control-' + this.state.active.i;
-            control = <Control key={key} field={this} color={this.state.active} />;
+            key = 'control-' + this.form_index++;
+            color = this.state.colors[this.state.active];
+            control = <Control key={key} field={this} color={color} />;
         }
         
         return (
