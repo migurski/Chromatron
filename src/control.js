@@ -7,10 +7,7 @@ export class Control extends React.Component
         super(props);
 
         this.field = props.field;
-        this.state = {
-            color: props.color,
-            handle: {x: props.color.r, y: 0}
-            };
+        this.handle = {x: props.color.r, y: 0};
 
         this.onCenterMouseDown = this.onCenterMouseDown.bind(this);
         this.onCenterMouseMove = this.onCenterMouseMove.bind(this);
@@ -29,12 +26,11 @@ export class Control extends React.Component
     
     onCenterMouseMove(e)
     {
-        var color = this.state.color;
+        var color = this.props.color;
         
         color.x = e.offsetX;
         color.y = e.offsetY;
         this.field.updateColor(color);
-        //this.setState({color: color});
 
         e.preventDefault();
     }
@@ -53,14 +49,13 @@ export class Control extends React.Component
     
     onHandleMouseMove(e)
     {
-        var color = this.state.color,
-            handle = this.state.handle;
+        var color = this.props.color,
+            handle = this.handle;
         
         handle.x = e.offsetX - color.x;
         handle.y = e.offsetY - color.y;
         color.r = Math.round(Math.hypot(handle.x, handle.y));
         this.field.updateColor(color);
-        //this.setState({color: color, handle: handle});
         
         e.preventDefault();
     }
@@ -80,8 +75,8 @@ export class Control extends React.Component
 
     render()
     {
-        var color = this.state.color,
-            handle = this.state.handle;
+        var color = this.props.color,
+            handle = this.handle;
     
         return (
             <g>

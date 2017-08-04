@@ -37,7 +37,7 @@ class Field extends React.Component
         // a default state
         var state = {
             colors: [ ],
-            active: null,
+            active: -1,
             stack: [ ],
             index: 0
         };
@@ -91,7 +91,7 @@ class Field extends React.Component
     
     onClickedBackground()
     {
-        this.setState({active: null});
+        this.setState({active: -1});
     }
     
     onClickedColor(color)
@@ -150,16 +150,16 @@ class Field extends React.Component
         // render a stack of forms
         for(var j = 0; j < this.state.stack.length; j++)
         {
-            key = 'form-' + this.form_index++;
+            key = 'form-' + j;
             color = this.state.colors[this.state.stack[j]];
             forms.push(<Form key={key} field={this} color={color} />)
         }
         
         // show control for the active color
-        if(this.state.active != undefined)
+        if(this.state.active >= 0)
         {
-            key = 'control-' + this.form_index++;
             color = this.state.colors[this.state.active];
+            key = 'control-' + color.id;
             control = <Control key={key} field={this} color={color} />;
         }
         
