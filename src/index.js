@@ -27,6 +27,7 @@ class Field extends React.Component
         this.onClickedBackground = this.onClickedBackground.bind(this);
         this.onRendered = this.onRendered.bind(this);
         this.saveState = this.saveState.bind(this);
+        this.addColor = this.addColor.bind(this);
         this.svgElement = null;
         this.timeout = null;
         this.form_index = 0;
@@ -116,6 +117,15 @@ class Field extends React.Component
         this.setState({stack: stack, active: index});
     }
     
+    addColor()
+    {
+        var color = {id: this.state.index++, fill: Chroma('#808080'), x: 160, y: 160, r: 80},
+            colors = this.state.colors.slice();
+        
+        colors.push(color);
+        this.setState({colors: colors, index: this.state.index});
+    }
+    
     updateColor(color)
     {
         var colors = this.state.colors.slice();
@@ -173,6 +183,9 @@ class Field extends React.Component
               <ol>
                 {forms}
               </ol>
+              <form>
+                <button onClick={this.addColor}>Add Color</button>
+              </form>
             </div>
         );
     }
