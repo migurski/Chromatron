@@ -140,6 +140,27 @@ class Field extends React.Component
         
         this.setState({colors: colors});
     }
+    
+    removeColor(color)
+    {
+        var colors = this.state.colors.slice(),
+            stack = this.state.stack.slice();
+        
+        for(var i = colors.length - 1; i >= 0; i--)
+        {
+            if(colors[i].id === color.id)
+            {
+                colors.splice(i, 1);
+                
+                for(var j = stack.length - 1; j >= 0; j--)
+                {
+                    if(stack[j] === i) { stack.splice(j, 1) }
+                }
+            }
+        }
+        
+        this.setState({stack: stack, colors: colors, active: -1});
+    }
 
     render()
     {
