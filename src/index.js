@@ -181,9 +181,12 @@ class Field extends React.Component
         // render a stack of forms
         for(var j = 0; j < this.state.stack.length; j++)
         {
-            key = 'form-' + j;
             color = this.state.colors[this.state.stack[j]];
-            forms.push(<Form key={key} field={this} color={color} />)
+            
+            if(color)
+            {
+                forms.unshift(<Form key={'form-' + j} field={this} color={color} />)
+            }
         }
         
         // show control for the active color
@@ -201,38 +204,8 @@ class Field extends React.Component
                 {colors}
                 {control}
               </svg>
-              <ol>
-                {forms}
-              </ol>
               <div style={{position: 'fixed', top: 0, right: 0, height: '100%'}}>
-                <form style={{display: 'block', float: 'right', width: 180, height: '100%', padding: 18, background: 'rgba(255,255,255,.8)'}}>
-                    <div style={{height: 50, background: '#7ed321'}} />
-                        <h3>RGB</h3>
-                        <p style={{height: 20, margin: 0, lineHeight: '19px', whiteSpace: 'nowrap'}}>
-                            <label htmlFor="rgb.r" style={{width: 40, display: 'block', float: 'left'}}>R: 126</label>
-                            <span>
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>◀</button>
-                            <input type="range" name="rgb.r" value="126" min="0" max="255" style={{width: 100, height: 9, margin: 0}} />
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>▶</button>
-                            </span>
-                        </p>
-                        <p style={{height: 20, margin: 0, lineHeight: '19px', whiteSpace: 'nowrap'}}>
-                            <label htmlFor="rgb.g" style={{width: 40, display: 'block', float: 'left'}}>G: 211</label>
-                            <span>
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>◀</button>
-                            <input type="range" name="rgb.g" value="211" min="0" max="255" style={{width: 100, height: 9, margin: 0}} />
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>▶</button>
-                            </span>
-                        </p>
-                        <p style={{height: 20, margin: 0, lineHeight: '19px', whiteSpace: 'nowrap'}}>
-                            <label htmlFor="rgb.b" style={{width: 40, display: 'block', float: 'left'}}>B: 33</label>
-                            <span>
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>◀</button>
-                            <input type="range" name="rgb.b" value="33" min="0" max="255" style={{width: 100, height: 9, margin: 0}} />
-                            <button style={{background: 'none', border: 'none', fontSize: 16, lineHeight: '17px', verticalAlign: 'top', width: 21, height: 13, paddingLeft: 2, paddingTop: 0, paddingRight: 2, paddingBottom: 0}}>▶</button>
-                            </span>
-                        </p>
-                </form>
+                {forms}
               </div>
               <form>
                 <button onClick={this.addColor}>Add Color</button>
