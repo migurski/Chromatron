@@ -112,7 +112,7 @@ class Field extends React.Component
         }
         
         stack.unshift(index);
-        stack.splice(3);
+        stack.splice(2);
         
         this.setState({stack: stack, active: index});
     }
@@ -150,12 +150,12 @@ class Field extends React.Component
         {
             if(colors[i].id === color.id)
             {
-                colors.splice(i, 1);
-                
                 for(var j = stack.length - 1; j >= 0; j--)
                 {
                     if(stack[j] === i) { stack.splice(j, 1) }
                 }
+
+                colors.splice(i, 1);
             }
         }
         
