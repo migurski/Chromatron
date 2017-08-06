@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Chroma from 'chroma-js'
 import zlib from 'zlib'
 import {Control} from './control.js'
 import {Form} from './form.js'
+import {Fill} from './color.js'
 
-function Color(props)
+function Circle(props)
 {
     return (
         <circle
@@ -51,7 +51,7 @@ class Field extends React.Component
         
             for(var i = 0; i < loaded.colors.length; i++)
             {
-                loaded.colors[i].fill = Chroma(loaded.colors[i].fill);
+                loaded.colors[i].fill = new Fill(loaded.colors[i].fill);
                 state.colors.push(loaded.colors[i]);
             }
             
@@ -60,8 +60,8 @@ class Field extends React.Component
         } catch(e) {
             // some lame default colors
             state.colors = [
-                {id: 0, fill: Chroma('#f0f'), x: 160, y: 160, r: 80},
-                {id: 1, fill: Chroma('#ff0'), x: 120, y: 120, r: 100}
+                {id: 0, fill: new Fill('#f0f'), x: 160, y: 160, r: 80},
+                {id: 1, fill: new Fill('#ff0'), x: 120, y: 120, r: 100}
                 ];
             state.index = 2;
         }
@@ -119,7 +119,7 @@ class Field extends React.Component
     
     addColor()
     {
-        var color = {id: this.state.index++, fill: Chroma('#808080'), x: 160, y: 160, r: 80},
+        var color = {id: this.state.index++, fill: new Fill('#808080'), x: 160, y: 160, r: 80},
             colors = this.state.colors.slice();
         
         colors.push(color);
@@ -164,18 +164,18 @@ class Field extends React.Component
 
     render()
     {
-        var colors = this.state.colors.slice(),
+        var circles = this.state.colors.slice(),
             forms = [],
             control = null,
             key, color;
     
         // smallest circles should appear in front
-        colors.sort(function(c1, c2) { return c2.r - c1.r });
+        circles.sort(function(c1, c2) { return c2.r - c1.r });
 
-        // build an array of Color components
-        for(var i = 0; i < colors.length; i++)
+        // swap in an array of Circle components
+        for(var i = 0; i < circles.length; i++)
         {
-            colors[i] = <Color key={i} field={this} color={colors[i]} />
+            circles[i] = <Circle key={i} field={this} color={circles[i]} />
         }
         
         // render a stack of forms
@@ -201,7 +201,7 @@ class Field extends React.Component
             <div>
               <svg ref={this.onRendered} xmlns="http://www.w3.org/2000/svg" width="650" height="400">
                 <rect width="100%" height="100%" onClick={this.onClickedBackground} style={{fill: '#f90'}} />
-                {colors}
+                {circles}
                 {control}
               </svg>
               <div style={{position: 'fixed', top: 0, right: 0, height: '100%'}}>

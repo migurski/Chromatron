@@ -71,7 +71,7 @@ export class Form extends React.Component
     {
         var form = this,
             fill = this.props.color.fill,
-            rgb = fill.rgb();
+            rgb = fill.rgb(), lab = fill.lab();
     
         return (
             <form style={{display: 'block', float: 'right', width: 180, height: '100%', padding: 18, background: 'rgba(255,255,255,.8)'}}>
@@ -80,6 +80,10 @@ export class Form extends React.Component
                     <Range key="rgb.r" name="rgb.r" label="R" value={rgb[0]} min="0" max="255" step="1" form={form} />
                     <Range key="rgb.g" name="rgb.g" label="G" value={rgb[1]} min="0" max="255" step="1" form={form} />
                     <Range key="rgb.b" name="rgb.b" label="B" value={rgb[2]} min="0" max="255" step="1" form={form} />
+                    <h3>Lab</h3>
+                    <Range key="lab.l" name="lab.l" label="L" value={lab[0].toFixed(1)} min="0" max="100" step=".3" form={form} />
+                    <Range key="lab.a" name="lab.a" label="a" value={lab[1].toFixed(1)} min="-110" max="110" step=".4" form={form} />
+                    <Range key="lab.b" name="lab.b" label="b" value={lab[2].toFixed(1)} min="-110" max="110" step=".4" form={form} />
             </form>
             )
     }
