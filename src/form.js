@@ -1,4 +1,5 @@
 import React from 'react';
+import {Fill} from './color.js'
 
 export function Range(props)
 {
@@ -36,16 +37,41 @@ export class Form extends React.Component
         super(props);
 
         this.field = props.field;
+        this.input = null;
         this.onClick = this.onClick.bind(this);
+        this.onInput = this.onInput.bind(this);
         this.onSlider = this.onSlider.bind(this);
         this.onButton = this.onButton.bind(this);
     }
-
+    
+    updateInput(value)
+    {
+        if(this.input && this.input !== document.activeElement)
+        {
+            this.input.value = value;
+        }
+    }
+    
     onClick(event)
     {
         var color = Object.assign({}, this.props.color);
         color.fill = color.fill.set(event.target.name, event.target.checked ? 255 : 0);
         this.field.updateColor(color);
+    }
+    
+    onInput(event)
+    {
+        var color = Object.assign({}, this.props.color);
+        try {
+            color.fill = new Fill(event.target.value);
+            this.field.updateColor(color);
+            if(event.type === 'blur')
+            {
+                this.updateInput(color.fill.hex())
+            }
+        } catch(error) {
+        }
+        event.preventDefault();
     }
     
     onSlider(event)
@@ -72,11 +98,14 @@ export class Form extends React.Component
         var form = this,
             fill = this.props.color.fill,
             rgb = fill.rgb(), lab = fill.lab(), lch = fill.lch(), hsl = fill.hsl();
-    
-        return (
+        
+        var element = (
             <form style={{display: 'block', float: 'right', width: 180, height: '100%', padding: 18, background: 'rgba(255,255,255,.8)'}}>
                 <div style={{height: 50, background: fill.hex()}} />
-                    <h3>RGB</h3>
+                    <h3>
+                        RGB
+                        <input type="text" defaultValue={fill.hex()} maxLength="7" style={{width: '7em', marginLeft: '10px'}} onChange={form.onInput} onBlur={form.onInput} ref={(input) => { form.input = input; }} />
+                    </h3>
                     <Range key="rgb.r" name="rgb.r" label="R" value={rgb[0]} min="0" max="255" step="1" title="Red" form={form} />
                     <Range key="rgb.g" name="rgb.g" label="G" value={rgb[1]} min="0" max="255" step="1" title="Green" form={form} />
                     <Range key="rgb.b" name="rgb.b" label="B" value={rgb[2]} min="0" max="255" step="1" title="Blue" form={form} />
@@ -94,5 +123,10 @@ export class Form extends React.Component
                     <Range key="hsl.l" name="hsl.l" label="L" value={hsl[2].toFixed(3)} min="0" max="1" step=".005" title="Lightness" form={form} />
             </form>
             )
+        
+        // Update the text input value or React may leave it unchanged to an old value.
+        this.updateInput(fill.hex());
+        
+        return element;
     }
 }

@@ -5,6 +5,13 @@ body
     color: #4A4A4A;
 }
 
+input[type='text']
+{
+    font-family: Droid Sans Mono, DroidSansMono, monospace;
+    font-size: 12px;
+    color: #4A4A4A;
+}
+
 h3
 {
     font-size: 14px;
