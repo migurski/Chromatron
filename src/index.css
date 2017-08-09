@@ -4,7 +4,7 @@ body
     padding: 0;
 }
 
-body, button
+body, button, a.button
 {
     font-family: Droid Sans, DroidSans, sans-serif;
     font-size: 12px;
@@ -18,8 +18,10 @@ input[type='text']
     color: #4A4A4A;
 }
 
-h3, button
+h3, button, a.button
 {
     font-weight: bold;
     font-size: 14px;
+    padding: 2px 6px 3px;
+    text-decoration: none;
 }

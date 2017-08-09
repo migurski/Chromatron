@@ -138,7 +138,7 @@ class Field extends React.Component
             x = Math.floor(rect.left + radius),
             y = Math.floor(rect.bottom + radius + 10);
         
-        var color = {id: this.state.index++, fill: new Fill('#808080'), x: x, y: y, r: radius},
+        var color = {id: this.state.index++, fill: new Fill('#f90'), x: x, y: y, r: radius},
             colors = this.state.colors.slice();
         
         colors.push(color);
@@ -225,6 +225,9 @@ class Field extends React.Component
             control = <Control key={key} field={this} color={color} />;
         }
         
+        var about_url = 'https://github.com/migurski/Chromatron',
+            feedback_url = about_url + '/issues/new?title=I+have+an+idea&body=You+should+totally…';
+        
         return (
             <div>
               <svg ref={this.onRendered} xmlns="http://www.w3.org/2000/svg" style={{
@@ -242,7 +245,17 @@ class Field extends React.Component
                     marginRight: 10,
                     backgroundColor: 'white', color: 'black',
                     border: '2px solid black', borderRadius: 6, cursor: 'pointer'
-                    }}>Add Color</button>
+                    }}>+ Add Color</button>
+                <a className="button" href={about_url} target="_blank" rel="noopener noreferrer" style={{
+                    marginRight: 10,
+                    backgroundColor: 'white',
+                    border: '2px solid black', borderRadius: 6, cursor: 'pointer'
+                    }}>About Chromatron</a>
+                <a className="button" href={feedback_url} target="_blank" rel="noopener noreferrer" style={{
+                    marginRight: 10,
+                    backgroundColor: 'white',
+                    border: '2px solid black', borderRadius: 6, cursor: 'pointer'
+                    }}>Send Feedback</a>
                 <button value='black' onClick={this.setBackground} style={{
                     marginRight: 10,
                     backgroundColor: 'black',
