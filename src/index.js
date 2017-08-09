@@ -24,6 +24,7 @@ class Field extends React.Component
         super();
         this.state = this.loadState();
 
+        this.setBackground = this.setBackground.bind(this);
         this.onClickedBackground = this.onClickedBackground.bind(this);
         this.onRendered = this.onRendered.bind(this);
         this.saveState = this.saveState.bind(this);
@@ -40,7 +41,8 @@ class Field extends React.Component
             colors: [ ],
             active: -1,
             stack: [ ],
-            index: 0
+            index: 0,
+            background: null
         };
 
         try {
@@ -55,6 +57,7 @@ class Field extends React.Component
                 state.colors.push(loaded.colors[i]);
             }
             
+            state.background = new Fill(loaded.background || 'gray');
             state.index = loaded.index || loaded.colors.length;
 
         } catch(e) {
@@ -71,7 +74,11 @@ class Field extends React.Component
     
     saveState()
     {
-        var state = { colors: [], index: this.state.index };
+        var state = {
+            colors: [ ],
+            background: this.state.background.hex(),
+            index: this.state.index
+            };
         
         for(var i = 0, color; i < this.state.colors.length; i++)
         {
@@ -88,6 +95,12 @@ class Field extends React.Component
     onRendered(svg)
     {
         this.svgElement = svg;
+    }
+    
+    setBackground(event)
+    {
+        this.setState({background: new Fill(event.target.value)});
+        event.preventDefault();
     }
     
     onClickedBackground()
@@ -216,7 +229,7 @@ class Field extends React.Component
               <svg ref={this.onRendered} xmlns="http://www.w3.org/2000/svg" style={{
                 position: 'fixed', left: 0, top: 0, width: '100%', height: '100%'
                 }}>
-                <rect width="100%" height="100%" onClick={this.onClickedBackground} style={{fill: '#f90'}} />
+                <rect width="100%" height="100%" onClick={this.onClickedBackground} style={{fill: this.state.background.hex()}} />
                 {circles}
                 {control}
               </svg>
@@ -229,20 +242,20 @@ class Field extends React.Component
                     backgroundColor: 'white', color: 'black',
                     border: '2px solid black', borderRadius: 6, cursor: 'pointer'
                     }}>Add Color</button>
-                <button style={{
+                <button value='black' onClick={this.setBackground} style={{
                     marginRight: 10,
                     backgroundColor: 'black',
                     border: '2px solid gray', borderRadius: 6, cursor: 'pointer'
                     }}>&nbsp;&nbsp;</button>
-                <button style={{
+                <button value='gray' onClick={this.setBackground} style={{
                     marginRight: 10,
                     backgroundColor: 'gray',
                     border: '2px solid white', borderRadius: 6, cursor: 'pointer'
                     }}>&nbsp;&nbsp;</button>
-                <button style={{
+                <button value='white' onClick={this.setBackground} style={{
                     marginRight: 10,
                     backgroundColor: 'white',
-                    border: '2px solid black', borderRadius: 6, cursor: 'pointer'
+                    border: '2px solid gray', borderRadius: 6, cursor: 'pointer'
                     }}>&nbsp;&nbsp;</button>
               </form>
             </div>
