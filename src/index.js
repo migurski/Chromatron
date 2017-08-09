@@ -117,13 +117,27 @@ class Field extends React.Component
         this.setState({stack: stack, active: index});
     }
     
-    addColor()
+    addColor(event)
     {
-        var color = {id: this.state.index++, fill: new Fill('#808080'), x: 160, y: 160, r: 80},
+        var rect = event.target.getBoundingClientRect(),
+            radius = Math.floor(rect.right/2 - rect.left/2),
+            x = Math.floor(rect.left + radius),
+            y = Math.floor(rect.bottom + radius + 10);
+        
+        var color = {id: this.state.index++, fill: new Fill('#808080'), x: x, y: y, r: radius},
             colors = this.state.colors.slice();
         
         colors.push(color);
         this.setState({colors: colors, index: this.state.index});
+        
+        var stack = this.state.stack.slice(),
+            index = colors.indexOf(color);
+
+        stack.unshift(index);
+        stack.splice(2);
+        this.setState({stack: stack, active: index});
+
+        event.preventDefault();
     }
     
     updateColor(color)
@@ -199,7 +213,9 @@ class Field extends React.Component
         
         return (
             <div>
-              <svg ref={this.onRendered} xmlns="http://www.w3.org/2000/svg" width="650" height="400">
+              <svg ref={this.onRendered} xmlns="http://www.w3.org/2000/svg" style={{
+                position: 'fixed', left: 0, top: 0, width: '100%', height: '100%'
+                }}>
                 <rect width="100%" height="100%" onClick={this.onClickedBackground} style={{fill: '#f90'}} />
                 {circles}
                 {control}
@@ -207,8 +223,27 @@ class Field extends React.Component
               <div style={{position: 'fixed', top: 0, right: 0, height: '100%'}}>
                 {forms}
               </div>
-              <form>
-                <button onClick={this.addColor}>Add Color</button>
+              <form style={{position: 'absolute', left: 15, top: 15}}>
+                <button onClick={this.addColor} style={{
+                    marginRight: 10,
+                    backgroundColor: 'white', color: 'black',
+                    border: '2px solid black', borderRadius: 6, cursor: 'pointer'
+                    }}>Add Color</button>
+                <button style={{
+                    marginRight: 10,
+                    backgroundColor: 'black',
+                    border: '2px solid gray', borderRadius: 6, cursor: 'pointer'
+                    }}>&nbsp;&nbsp;</button>
+                <button style={{
+                    marginRight: 10,
+                    backgroundColor: 'gray',
+                    border: '2px solid white', borderRadius: 6, cursor: 'pointer'
+                    }}>&nbsp;&nbsp;</button>
+                <button style={{
+                    marginRight: 10,
+                    backgroundColor: 'white',
+                    border: '2px solid black', borderRadius: 6, cursor: 'pointer'
+                    }}>&nbsp;&nbsp;</button>
               </form>
             </div>
         );
