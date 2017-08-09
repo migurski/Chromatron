@@ -66,6 +66,7 @@ class Field extends React.Component
                 {id: 0, fill: new Fill('#f0f'), x: 160, y: 160, r: 80},
                 {id: 1, fill: new Fill('#ff0'), x: 120, y: 120, r: 100}
                 ];
+            state.background = new Fill('gray');
             state.index = 2;
         }
         
